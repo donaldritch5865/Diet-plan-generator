@@ -9,7 +9,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Security middleware
 app.use(helmet());
@@ -23,24 +23,25 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
+  max: 100, // Increased limit for development
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use('/api/', limiter);
 
 app.use(express.json({ limit: '10mb' }));
 
-// MongoDB connection
+// MongoDB connection (optional)
 const connectDB = async () => {
   try {
     if (process.env.MONGODB_URI) {
       await mongoose.connect(process.env.MONGODB_URI);
-      console.log('MongoDB connected successfully');
+      console.log('✅ MongoDB connected successfully');
     } else {
-      console.log('MongoDB URI not provided, running without database');
+      console.log('ℹ️  MongoDB URI not provided, running without database');
     }
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error('❌ MongoDB connection error:', error.message);
+    console.log('ℹ️  Continuing without database...');
   }
 };
 
@@ -64,14 +65,19 @@ const userDataSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
-const UserData = mongoose.model('UserData', userDataSchema);
+const UserData = mongoose.models.UserData || mongoose.model('UserData', userDataSchema);
 
 // Initialize Gemini AI
 let genAI;
 if (process.env.GEMINI_API_KEY) {
-  genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  try {
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    console.log('✅ Gemini AI initialized successfully');
+  } catch (error) {
+    console.error('❌ Gemini AI initialization error:', error.message);
+  }
 } else {
-  console.warn('GEMINI_API_KEY not provided. AI features will not work.');
+  console.warn('⚠️  GEMINI_API_KEY not provided. AI features will not work.');
 }
 
 // Helper functions
@@ -188,12 +194,14 @@ app.get('/api/health', (req, res) => {
 
 app.post('/api/generate-plan', async (req, res) => {
   try {
+    console.log('📝 Received plan generation request');
     const userData = req.body;
     
     // Validate required fields
     const requiredFields = ['age', 'height', 'currentWeight', 'targetWeight', 'fitnessGoal', 'dietaryPreference', 'sugarIntake', 'waterIntake'];
     for (const field of requiredFields) {
-      if (!userData[field]) {
+      if (userData[field] === undefined || userData[field] === null) {
+        console.error(`❌ Missing required field: ${field}`);
         return res.status(400).json({ error: `Missing required field: ${field}` });
       }
     }
@@ -209,18 +217,23 @@ app.post('/api/generate-plan', async (req, res) => {
       estimatedGoalDate
     };
 
+    console.log('🧮 BMI calculated:', bmi.toFixed(1), bmiCategory);
+
     let aiResponse = '';
     
     if (genAI) {
       try {
+        console.log('🤖 Generating AI response...');
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
         const prompt = buildGeminiPrompt(userData, bmiData);
         
         const result = await model.generateContent(prompt);
         const response = await result.response;
         aiResponse = response.text();
+        console.log('✅ AI response generated successfully');
       } catch (aiError) {
-        console.error('AI generation error:', aiError);
+        console.error('❌ AI generation error:', aiError.message);
+        // Provide fallback response
         aiResponse = `**Personalized Diet Plan**
 
 **Weekly Meal Plan Overview**
@@ -271,7 +284,8 @@ Based on your profile (Age: ${userData.age}, Goal: ${userData.fitnessGoal}, Diet
 This plan is designed to help you reach your target weight of ${userData.targetWeight}kg by ${estimatedGoalDate}. Stay consistent and be patient with the process!`;
       }
     } else {
-      aiResponse = 'AI service is not available. Please configure GEMINI_API_KEY.';
+      console.warn('⚠️  AI service not available, using fallback response');
+      aiResponse = 'AI service is temporarily unavailable. Please check your API key configuration.';
     }
 
     // Save to database if available
@@ -285,8 +299,9 @@ This plan is designed to help you reach your target weight of ${userData.targetW
           aiResponse
         });
         await newUserData.save();
+        console.log('💾 User data saved to database');
       } catch (dbError) {
-        console.error('Database save error:', dbError);
+        console.error('❌ Database save error:', dbError.message);
       }
     }
 
@@ -297,10 +312,14 @@ This plan is designed to help you reach your target weight of ${userData.targetW
       timestamp: new Date().toISOString()
     };
 
+    console.log('✅ Plan generated successfully');
     res.json(response);
   } catch (error) {
-    console.error('Error generating plan:', error);
-    res.status(500).json({ error: 'Failed to generate diet plan' });
+    console.error('❌ Error generating plan:', error.message);
+    res.status(500).json({ 
+      error: 'Failed to generate diet plan',
+      details: error.message 
+    });
   }
 });
 
@@ -321,7 +340,7 @@ app.post('/api/save-user-data', async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('❌ Server error:', err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
@@ -330,13 +349,31 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('🛑 SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('🛑 SIGINT received, shutting down gracefully');
+  process.exit(0);
+});
+
 // Start server
 const startServer = async () => {
-  await connectDB();
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`Health check: http://localhost:${PORT}/api/health`);
-  });
+  try {
+    await connectDB();
+    
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🔍 Health check: http://localhost:${PORT}/api/health`);
+      console.log(`🤖 AI Status: ${genAI ? '✅ Ready' : '❌ Not configured'}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error.message);
+    process.exit(1);
+  }
 };
 
 startServer();
