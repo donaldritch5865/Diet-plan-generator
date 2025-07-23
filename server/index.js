@@ -137,7 +137,7 @@ ${userData.upcomingEvent ? `- Upcoming Event: ${userData.upcomingEvent}` : ''}
 ${userData.sportsInterest ? `- Sports/Activities: ${userData.sportsInterest}` : ''}
 ${userData.pastFitnessIssues ? `- Health Considerations: ${userData.pastFitnessIssues}` : ''}
 
-**IMPORTANT: Format your response EXACTLY like this structure:**
+IMPORTANT: Format your response EXACTLY like this structure:
 
 **[Diet Type] [Goal] Plan for a [Age]-Year-Old [Activity/Description]**
 
@@ -147,7 +147,7 @@ ${userData.pastFitnessIssues ? `- Health Considerations: ${userData.pastFitnessI
 
 **Calorie Target:** Approximately [calculated calories] calories per day (This creates a [deficit/surplus] for [goal], but is enough to support [activities]. Individual needs vary, so monitor progress and adjust if needed).
 
-**Weekly Meal Plan (Example - Adjust portion sizes as needed):**
+**Weekly Meal Plan:**
 
 **Day 1:**
 
@@ -233,7 +233,7 @@ Make sure to:
 3. Provide detailed, practical meal descriptions
 4. Consider their dietary preferences strictly
 5. Make it relevant to their sports/activities
-6. Keep the format EXACTLY as shown above with proper spacing and bullet points`;
+7. Keep the format EXACTLY as shown above with proper spacing and bullet points
 };
 
 // Routes
