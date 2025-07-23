@@ -128,18 +128,6 @@ const buildGeminiPrompt = (userData, bmiData) => {
 - Height: ${userData.height} cm
 - Current Weight: ${userData.currentWeight} kg
 - Target Weight: ${userData.targetWeight} kg
-- BMI: ${bmiData.bmi.toFixed(1)} (${bmiData.category})
-- Primary Goal: ${goalText[userData.fitnessGoal]}
-- Dietary Preference: ${dietText[userData.dietaryPreference]}
-- Sugar Intake: ${userData.sugarIntake}
-- Daily Water Intake: ${userData.waterIntake} glasses
-${userData.upcomingEvent ? `- Upcoming Event: ${userData.upcomingEvent}` : ''}
-${userData.sportsInterest ? `- Sports/Activities: ${userData.sportsInterest}` : ''}
-${userData.pastFitnessIssues ? `- Health Considerations: ${userData.pastFitnessIssues}` : ''}
-
-IMPORTANT: Format your response EXACTLY like this:
-
-${dietText[userData.dietaryPreference].charAt(0).toUpperCase() + dietText[userData.dietaryPreference].slice(1)} ${goalText[userData.fitnessGoal].charAt(0).toUpperCase() + goalText[userData.fitnessGoal].slice(1).replace('_', ' ')} Plan for a ${userData.age}-Year-Old${userData.sportsInterest ? ` ${userData.sportsInterest} Player` : ''}
 
 Client Profile: ${userData.age}-year-old, ${userData.height} cm, ${userData.currentWeight} kg, aiming for ${userData.targetWeight} kg, ${dietText[userData.dietaryPreference]}, ${userData.sugarIntake} consumes sugar, drinks ${(userData.waterIntake * 0.25).toFixed(1)}L water daily${userData.sportsInterest ? `, plays ${userData.sportsInterest.toLowerCase()}` : ''}${userData.pastFitnessIssues ? `, ${userData.pastFitnessIssues.toLowerCase()}` : ', no past fitness issues'}.
 
