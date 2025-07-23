@@ -121,7 +121,7 @@ const buildGeminiPrompt = (userData, bmiData) => {
     'paleo': 'paleo'
   };
 
-  return `You are a certified nutritionist and fitness expert. Create a comprehensive, personalized diet plan for the following individual:
+  return `You are a certified nutritionist and fitness expert. Create a comprehensive, personalized diet plan in the EXACT format shown below for the following individual:
 
 **PERSONAL PROFILE:**
 - Age: ${userData.age} years
@@ -137,47 +137,103 @@ ${userData.upcomingEvent ? `- Upcoming Event: ${userData.upcomingEvent}` : ''}
 ${userData.sportsInterest ? `- Sports/Activities: ${userData.sportsInterest}` : ''}
 ${userData.pastFitnessIssues ? `- Health Considerations: ${userData.pastFitnessIssues}` : ''}
 
-**REQUIREMENTS:**
-Please provide a detailed, structured diet plan that includes:
+**IMPORTANT: Format your response EXACTLY like this structure:**
 
-**Weekly Meal Plan Overview**
-- 7-day meal structure with breakfast, lunch, dinner, and 2 snacks
-- Specific meal suggestions for each day
-- Portion sizes and timing recommendations
+**[Diet Type] [Goal] Plan for a [Age]-Year-Old [Activity/Description]**
 
-**Daily Nutritional Guidelines**
-- Target daily calorie intake
-- Macronutrient breakdown (proteins, carbs, fats)
-- Key vitamins and minerals to focus on
+**Client Profile:** [Age]-year-old [gender if mentioned], [height] cm, [current weight] kg, aiming for [target weight] kg, [dietary preference], [sugar intake frequency] consumes sugar, drinks [water intake]L water daily, [sports/activities if mentioned], [health considerations if any].
 
-**Hydration Strategy**
-- Optimal water intake schedule
-- Additional hydration tips
-- Beverages to include/avoid
+**Goal:** [Specific goal with target weight loss/gain] through a healthy, balanced [dietary preference] diet and exercise regime.
 
-**Exercise Recommendations**
-- Complementary workout suggestions
-- Activity level recommendations
-- Recovery and rest day guidance
+**Calorie Target:** Approximately [calculated calories] calories per day (This creates a [deficit/surplus] for [goal], but is enough to support [activities]. Individual needs vary, so monitor progress and adjust if needed).
 
-**Lifestyle Tips**
-- Meal prep suggestions
-- Healthy snacking options
-- Tips for dining out
-- Managing cravings
+**Weekly Meal Plan (Example - Adjust portion sizes as needed):**
 
-**Progress Tracking**
-- Key metrics to monitor
-- Weekly check-in recommendations
-- Signs of progress to look for
+**Day 1:**
 
-**Important Considerations**
-- Foods to emphasize
-- Foods to limit or avoid
-- Supplement recommendations (if any)
-- When to consult healthcare providers
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
 
-Please make this plan practical, sustainable, and tailored to their specific goals and preferences. Use clear formatting with headers and bullet points for easy reading.`;
+**Day 2:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Day 3:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Day 4:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Day 5:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Day 6:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Day 7:**
+
+• **Breakfast ([calories] calories):** [Detailed meal description]
+• **Lunch ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+• **Dinner ([calories] calories):** [Detailed meal description]
+• **Snack ([calories] calories):** [Detailed snack description]
+
+**Hydration Guidelines:**
+- [Specific water intake recommendations]
+- [Timing suggestions]
+- [Additional hydration tips]
+
+**Exercise Recommendations:**
+- [Specific workout suggestions based on sports interest]
+- [Frequency and duration]
+- [Recovery recommendations]
+
+**Additional Tips:**
+- [Meal prep suggestions]
+- [Healthy alternatives]
+- [Progress monitoring advice]
+- [Lifestyle recommendations]
+
+**Important Notes:**
+- [Foods to emphasize]
+- [Foods to limit]
+- [Supplement recommendations if any]
+- [When to consult healthcare providers]
+
+Make sure to:
+1. Calculate appropriate calorie targets based on their goal
+2. Include specific calorie counts for each meal
+3. Provide detailed, practical meal descriptions
+4. Consider their dietary preferences strictly
+5. Make it relevant to their sports/activities
+6. Keep the format EXACTLY as shown above with proper spacing and bullet points`;
 };
 
 // Routes
