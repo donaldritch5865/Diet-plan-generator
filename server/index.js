@@ -121,7 +121,7 @@ const buildGeminiPrompt = (userData, bmiData) => {
     'paleo': 'paleo'
   };
 
-  return `You are a certified nutritionist and fitness expert. Create a comprehensive, personalized diet plan in the EXACT format shown below for the following individual:
+  return `You are a certified nutritionist and fitness expert. Create a comprehensive, personalized diet plan for the following individual:
 
 **PERSONAL PROFILE:**
 - Age: ${userData.age} years
@@ -137,103 +137,75 @@ ${userData.upcomingEvent ? `- Upcoming Event: ${userData.upcomingEvent}` : ''}
 ${userData.sportsInterest ? `- Sports/Activities: ${userData.sportsInterest}` : ''}
 ${userData.pastFitnessIssues ? `- Health Considerations: ${userData.pastFitnessIssues}` : ''}
 
-IMPORTANT: Format your response EXACTLY like this structure:
+IMPORTANT: Format your response EXACTLY like this:
 
-**[Diet Type] [Goal] Plan for a [Age]-Year-Old [Activity/Description]**
+${dietText[userData.dietaryPreference].charAt(0).toUpperCase() + dietText[userData.dietaryPreference].slice(1)} ${goalText[userData.fitnessGoal].charAt(0).toUpperCase() + goalText[userData.fitnessGoal].slice(1).replace('_', ' ')} Plan for a ${userData.age}-Year-Old${userData.sportsInterest ? ` ${userData.sportsInterest} Player` : ''}
 
-**Client Profile:** [Age]-year-old [gender if mentioned], [height] cm, [current weight] kg, aiming for [target weight] kg, [dietary preference], [sugar intake frequency] consumes sugar, drinks [water intake]L water daily, [sports/activities if mentioned], [health considerations if any].
+Client Profile: ${userData.age}-year-old, ${userData.height} cm, ${userData.currentWeight} kg, aiming for ${userData.targetWeight} kg, ${dietText[userData.dietaryPreference]}, ${userData.sugarIntake} consumes sugar, drinks ${(userData.waterIntake * 0.25).toFixed(1)}L water daily${userData.sportsInterest ? `, plays ${userData.sportsInterest.toLowerCase()}` : ''}${userData.pastFitnessIssues ? `, ${userData.pastFitnessIssues.toLowerCase()}` : ', no past fitness issues'}.
 
-**Goal:** [Specific goal with target weight loss/gain] through a healthy, balanced [dietary preference] diet and exercise regime.
+Goal: ${goalText[userData.fitnessGoal].charAt(0).toUpperCase() + goalText[userData.fitnessGoal].slice(1).replace('_', ' ')} ${Math.abs(userData.currentWeight - userData.targetWeight)} kg through a healthy, balanced ${dietText[userData.dietaryPreference]} diet and exercise regime.
 
-**Calorie Target:** Approximately [calculated calories] calories per day (This creates a [deficit/surplus] for [goal], but is enough to support [activities]. Individual needs vary, so monitor progress and adjust if needed).
+Calorie Target: Approximately ${userData.fitnessGoal === 'lose_weight' ? '1800-2000' : userData.fitnessGoal === 'gain_weight' ? '2200-2500' : '2000-2200'} calories per day (This creates a ${userData.fitnessGoal === 'lose_weight' ? 'deficit for weight loss' : userData.fitnessGoal === 'gain_weight' ? 'surplus for weight gain' : 'balance for maintenance'}, but is enough to support ${userData.sportsInterest ? userData.sportsInterest.toLowerCase() + ' training' : 'daily activities'}. Individual needs vary, so monitor progress and adjust if needed).
 
-**Weekly Meal Plan:**
+Weekly Meal Plan (Example - Adjust portion sizes as needed):
 
-**Day 1:**
+Day 1:
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+• Breakfast (350 calories): [Detailed ${dietText[userData.dietaryPreference]} breakfast with specific foods]
+• Lunch (400 calories): [Detailed ${dietText[userData.dietaryPreference]} lunch with specific foods]
+• Snack (150 calories): [Healthy snack option]
+• Dinner (450 calories): [Detailed ${dietText[userData.dietaryPreference]} dinner with specific foods]
+• Snack (100 calories): [Light evening snack]
 
-**Day 2:**
+Day 2:
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+• Breakfast (300 calories): [Different ${dietText[userData.dietaryPreference]} breakfast option]
+• Lunch (450 calories): [Different ${dietText[userData.dietaryPreference]} lunch option]
+• Snack (150 calories): [Different healthy snack]
+• Dinner (500 calories): [Different ${dietText[userData.dietaryPreference]} dinner option]
+• Snack (100 calories): [Different light snack]
 
-**Day 3:**
+Day 3:
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+• Breakfast (350 calories): [Third ${dietText[userData.dietaryPreference]} breakfast variation]
+• Lunch (400 calories): [Third ${dietText[userData.dietaryPreference]} lunch variation]
+• Snack (150 calories): [Third snack option]
+• Dinner (450 calories): [Third ${dietText[userData.dietaryPreference]} dinner variation]
+• Snack (100 calories): [Third light snack option]
 
-**Day 4:**
+Day 4:
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+• Breakfast (300 calories): [Fourth ${dietText[userData.dietaryPreference]} breakfast option]
+• Lunch (500 calories): [Fourth ${dietText[userData.dietaryPreference]} lunch option]
+• Snack (100 calories): [Fourth snack option]
+• Dinner (450 calories): [Fourth ${dietText[userData.dietaryPreference]} dinner option]
+• Snack (150 calories): [Fourth evening snack]
 
-**Day 5:**
+Day 5 - 7: Repeat meals from the previous days, adjusting based on your preferences and availability. Focus on variety and ensure you're getting enough protein.
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+Recommended Exercise Routine:
 
-**Day 6:**
+• ${userData.sportsInterest ? `${userData.sportsInterest} Training: Continue your regular ${userData.sportsInterest.toLowerCase()} training schedule.` : 'Regular Exercise: Include 30-45 minutes of moderate exercise daily.'}
+• Strength Training (2-3 times/week): Focus on compound exercises like squats, lunges, deadlifts, push-ups, and rows. Include core work. This builds muscle, boosts metabolism, and supports performance${userData.sportsInterest ? ` on the field` : ''}.
+• Cardio (2-3 times/week): 30-45 minutes of moderate-intensity cardio like running, cycling, or swimming. This burns calories and improves cardiovascular health.
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+Hydration and Recovery Tips:
 
-**Day 7:**
+• Water: Aim for at least ${(userData.waterIntake * 0.25).toFixed(1)}L of water per day, especially on training days. Carry a water bottle with you and sip throughout the day.
+• Electrolytes: Replenish electrolytes lost during training with electrolyte drinks or by consuming foods rich in potassium and sodium (bananas, coconut water).
+• Sleep: Aim for 7-9 hours of quality sleep per night. This is crucial for muscle recovery and overall health.
+• Protein: Ensure adequate protein intake (around 1.4-1.8g/kg of body weight) for muscle repair and growth. Good sources include lentils, beans, tofu, tempeh, quinoa, nuts, seeds, and Greek yogurt.
+• Post-Workout Nutrition: Consume a post-workout snack or meal containing carbohydrates and protein within 30-60 minutes of training to replenish glycogen stores and promote muscle recovery. Examples: Smoothie with protein powder and fruit, Greek yogurt with berries and granola, or a whole-wheat sandwich with hummus and vegetables.
 
-• **Breakfast ([calories] calories):** [Detailed meal description]
-• **Lunch ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
-• **Dinner ([calories] calories):** [Detailed meal description]
-• **Snack ([calories] calories):** [Detailed snack description]
+Important Considerations:
 
-**Hydration Guidelines:**
-- [Specific water intake recommendations]
-- [Timing suggestions]
-- [Additional hydration tips]
+• Consult a Doctor: This plan is a general guideline. It's important to consult with your doctor or a registered dietitian before making any significant dietary changes, especially if you have any underlying health conditions.
+• Listen to Your Body: Pay attention to your body's hunger and fullness cues. Adjust portion sizes as needed and don't restrict calories too severely.
+• Gradual Changes: Make gradual changes to your diet rather than drastic ones. This will help you stick to the plan long-term.
+• Stay Consistent: Consistency is key to achieving your goals. Stick to the plan as much as possible, but don't be too hard on yourself if you have occasional slip-ups.
+• Monitor Progress: Track your weight, measurements, and how you feel. Adjust the plan as needed based on your progress and feedback from your body.
 
-**Exercise Recommendations:**
-- [Specific workout suggestions based on sports interest]
-- [Frequency and duration]
-- [Recovery recommendations]
-
-**Additional Tips:**
-- [Meal prep suggestions]
-- [Healthy alternatives]
-- [Progress monitoring advice]
-- [Lifestyle recommendations]
-
-**Important Notes:**
-- [Foods to emphasize]
-- [Foods to limit]
-- [Supplement recommendations if any]
-- [When to consult healthcare providers]
-
-Make sure to:
-1. Calculate appropriate calorie targets based on their goal
-2. Include specific calorie counts for each meal
-3. Provide detailed, practical meal descriptions
-4. Consider their dietary preferences strictly
-5. Make it relevant to their sports/activities
-7. Keep the format EXACTLY as shown above with proper spacing and bullet points`;
+Provide specific, detailed meal descriptions that strictly follow the ${dietText[userData.dietaryPreference]} dietary preference. Include exact foods, preparation methods, and make it practical for daily implementation.`;
 };
 
 // Routes
