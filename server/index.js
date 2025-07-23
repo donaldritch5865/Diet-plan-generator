@@ -233,7 +233,7 @@ Make sure to:
 3. Provide detailed, practical meal descriptions
 4. Consider their dietary preferences strictly
 5. Make it relevant to their sports/activities
-7. Keep the format EXACTLY as shown above with proper spacing and bullet points
+7. Keep the format EXACTLY as shown above with proper spacing and bullet points`;
 };
 
 // Routes
