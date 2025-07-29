@@ -72,7 +72,7 @@ let genAI;
 if (process.env.GEMINI_API_KEY) {
   try {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    console.log('✅ Gemini AI initialized successfully');
+    console.log('✅ Gemini AI initialized successfully with key:', process.env.GEMINI_API_KEY.substring(0, 10) + '...');
   } catch (error) {
     console.error('❌ Gemini AI initialization error:', error.message);
   }
